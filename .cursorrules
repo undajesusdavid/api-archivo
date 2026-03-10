@@ -1,0 +1,25 @@
+# Reglas de Arquitectura del Proyecto
+- Sigue estrictamente el patrón Hexagonal + DDD con vertical slice.
+- Cada módulo debe tener una única responsabilidad y ser lo más pequeño posible.
+- La arquitectura debe ser purista, evitando dependencias externas.
+- Aplicar los principios SOLID pero evitando la sobre ingeniería.
+
+# Reglas para carpetas y archivos
+- Los nombres de carpeta y archivos deben ser en kebab-case (ej: user-repository).
+- Los nombres de las clases deben ser en PascalCase (ej: UserRepository).
+- Los nombres de los métodos, parámetros y variables deben ser en camelCase (ej: getUserById).
+- Los nombres de las constantes y variables de entorno deben ser en UPPER_SNAKE_CASE (ej: USER_ID).
+
+# Reglas para la creacion de nuevos modulos
+- Cada nuevo módulo debe tener las carpetas: /core, /app, /infrastructure.
+- Guiate de la estructura de los modulos existentes.
+
+
+
+
+
+
+
+
+
+
