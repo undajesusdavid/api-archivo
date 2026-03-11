@@ -27,15 +27,18 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       code = exception.code;
     }
 
-    // B. Capturar errores de Sequelize (Ejemplos comunes)
-    else if (exception.name === 'SequelizeUniqueConstraintError') {
-      status = HttpStatus.CONFLICT;
-      message = 'Conflicto de duplicidad en la base de datos';
-      code = 'DB_UNIQUE_CONSTRAINT';
-    } else if (exception.name === 'SequelizeForeignKeyConstraintError') {
-      status = HttpStatus.BAD_REQUEST;
-      message = 'Error de relación: Referencia no encontrada';
-      code = 'DB_FOREIGN_KEY_ERROR';
+    // B. Capturar errores de TypeORM
+    else if (exception.name === 'QueryFailedError') {
+      const driverError = exception.driverError;
+      if (driverError && driverError.code === '23505') {
+        status = HttpStatus.CONFLICT;
+        message = 'Conflicto de duplicidad en la base de datos';
+        code = 'DB_UNIQUE_CONSTRAINT';
+      } else if (driverError && driverError.code === '23503') {
+        status = HttpStatus.BAD_REQUEST;
+        message = 'Error de relación: Referencia no encontrada';
+        code = 'DB_FOREIGN_KEY_ERROR';
+      }
     }
 
     // C. Errores de NestJS (HttpException)

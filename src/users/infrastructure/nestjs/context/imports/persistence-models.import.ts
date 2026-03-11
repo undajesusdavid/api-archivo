@@ -1,11 +1,11 @@
-//Models
-import { SequelizeModule } from '@nestjs/sequelize';
-import { SequelizeUserModel } from '../../../persistence/sequelize/user.model';
-import { SequelizeUserRoleModel } from '../../../persistence/sequelize/user_roles.model';
+//Models de TypeORM
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserOrmEntity } from '../../../persistence/typeorm/user.model';
+import { TypeormRoleModel } from '../../../../../roles/infrastructure/persistence/typeorm/role.model';
 
-const SequelizeModels = SequelizeModule.forFeature([
-  SequelizeUserModel,
-  SequelizeUserRoleModel,
+const TypeOrmModels = TypeOrmModule.forFeature([
+  UserOrmEntity,
+  TypeormRoleModel,
 ]);
 
-export const PersistenceModels = [SequelizeModels];
+export const PersistenceModels = [TypeOrmModels];

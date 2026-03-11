@@ -16,7 +16,10 @@ export class SeederRunner {
         await seeder.run();
         this.logger.log(`✅ Seeder ${seederName} completado con éxito.`);
       } catch (error) {
-        this.logger.error(`❌ Error al ejecutar el seeder ${seederName}:`, error);
+        this.logger.error(
+          `❌ Error al ejecutar el seeder ${seederName}:`,
+          error,
+        );
         throw error;
       }
     }

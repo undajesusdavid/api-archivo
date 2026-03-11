@@ -33,7 +33,9 @@ export class UserSeeder implements Seeder {
         // Buscamos el ID del rol por su nombre
         const role = await this.roleRepository.findByName(u.role);
         if (!role) {
-          throw new Error(`Rol ${u.role} no encontrado para el usuario ${u.username}`);
+          throw new Error(
+            `Rol ${u.role} no encontrado para el usuario ${u.username}`,
+          );
         }
 
         const user = new User({

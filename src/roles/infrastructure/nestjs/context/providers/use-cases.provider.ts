@@ -3,7 +3,10 @@ import {
   IUnitOfWork,
   UNIT_OF_WORK,
 } from 'src/shared/core/interfaces/unit-of-work.interface';
-import { ROLE_REPOSITORY, RoleRepository } from 'src/roles/core/contracts/RoleRepository';
+import {
+  ROLE_REPOSITORY,
+  RoleRepository,
+} from 'src/roles/core/contracts/RoleRepository';
 import {
   PERMISSION_REPOSITORY,
   PermissionRepository,

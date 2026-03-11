@@ -1,3 +1,9 @@
+# Stack del Proyecto
+- Node.js
+- Nest.js
+- TypeORM
+- PostgreSQL
+
 # Reglas de Arquitectura del Proyecto
 - Sigue estrictamente el patrón Hexagonal + DDD con vertical slice.
 - Cada módulo debe tener una única responsabilidad y ser lo más pequeño posible.
@@ -13,6 +19,16 @@
 # Reglas para la creacion de nuevos modulos
 - Cada nuevo módulo debe tener las carpetas: /core, /app, /infrastructure.
 - Guiate de la estructura de los modulos existentes.
+- Garantiza la consistencia estandar del proyecto en todos los modulos.
+- Usa el sistema de Roles y Permisos actual.
+- Agrega los permisos necesarios para el modulo.
+- Genera las migraciones necesarias respetando las llaves foráneas.
+- Garantiza que todo el ciclo de vida de las peticiones a la api funcionen.
+- cuando termines de crear los modulos exporta explicacion detallada de las reglas de negocio que creaste.
+- los nombres de las  tablas deben estar en español.
+- los nombres de las columnas deben estar en ingles.
+
+
 
 
 

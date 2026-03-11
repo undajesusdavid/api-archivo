@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 //ORMS
 import { TypeOrmModuleConfig } from '../../persistence/typeorm/typeorm.config'; // TypeORM
-import { SequelizeConfigService } from '../../persistence/sequelize/sequelize.config'; // Sequelize
 
 // PATRON COMMAND BUS
 import { COMMAND_BUS } from 'src/shared/app/bus/command-bus';
@@ -13,18 +12,18 @@ import { NestQueryBus } from '../bus/nest-query-bus'; // Nestjs
 
 // PATRON UNIT OF WORK
 import { UNIT_OF_WORK } from '../../../core/interfaces/unit-of-work.interface';
-import { SequelizeUnitOfWork } from '../../persistence/sequelize/sequelize.unit-of-work'; // Sequelize
+import { TypeOrmUnitOfWork } from '../../persistence/typeorm/typeorm.unit-of.work'; // TypeORM
 
 // SERVICIOS PERZONALIZADOS
 import { UuidService } from '../../base/services/uuid.service';
 import { UUID_SERVICE } from 'src/shared/core/interfaces/uuid-service.interface';
 
 @Module({
-  imports: [SequelizeConfigService, TypeOrmModuleConfig],
+  imports: [TypeOrmModuleConfig],
   providers: [
     {
       provide: UNIT_OF_WORK,
-      useClass: SequelizeUnitOfWork,
+      useClass: TypeOrmUnitOfWork,
     },
     {
       provide: COMMAND_BUS,

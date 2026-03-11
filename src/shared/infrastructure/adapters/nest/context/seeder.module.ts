@@ -7,6 +7,8 @@ import { PermissionModule } from 'src/permissions/infrastructure/nestjs/context/
 import { PermissionSeeder } from 'src/permissions/infrastructure/persistence/seeding/permission.seeder';
 import { RoleSeeder } from 'src/roles/infrastructure/persistence/seeding/role.seeder';
 import { UserSeeder } from 'src/users/infrastructure/persistence/seeding/user.seeder';
+import { InventoryModule } from 'src/inventory/infrastructure/nestjs/context/inventory.module';
+import { InventorySeeder } from 'src/inventory/infrastructure/persistence/seeding/inventory.seeder';
 
 @Module({
   imports: [
@@ -15,8 +17,9 @@ import { UserSeeder } from 'src/users/infrastructure/persistence/seeding/user.se
     UserModule,
     RolesModule,
     PermissionModule,
+    InventoryModule,
   ],
-  providers: [PermissionSeeder, RoleSeeder, UserSeeder],
-  exports: [PermissionSeeder, RoleSeeder, UserSeeder],
+  providers: [PermissionSeeder, RoleSeeder, UserSeeder, InventorySeeder],
+  exports: [PermissionSeeder, RoleSeeder, UserSeeder, InventorySeeder],
 })
 export class SeederModule {}

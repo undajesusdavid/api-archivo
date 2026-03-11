@@ -38,7 +38,10 @@ export class RoleSeeder implements Seeder {
         if (r.name === 'root') {
           const allPermissions = await this.permissionRepository.findAll();
           const permissionIds = allPermissions.map((p) => p.getId());
-          await this.roleRepository.assignPermissions(role.getId(), permissionIds);
+          await this.roleRepository.assignPermissions(
+            role.getId(),
+            permissionIds,
+          );
         }
       }
     }

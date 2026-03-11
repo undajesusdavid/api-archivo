@@ -21,14 +21,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = HttpStatus.BAD_REQUEST;
       message = exception.message;
       code = exception.code;
-    } else if (exception.name === 'SequelizeUniqueConstraintError') {
-      status = HttpStatus.CONFLICT;
-      message = 'Conflicto de duplicidad en la base de datos';
-      code = 'DB_UNIQUE_CONSTRAINT';
-    } else if (exception.name === 'SequelizeForeignKeyConstraintError') {
-      status = HttpStatus.BAD_REQUEST;
-      message = 'Error de relación: Referencia no encontrada';
-      code = 'DB_FOREIGN_KEY_ERROR';
+    } else if (exception.name === 'QueryFailedError') {
+      const driverError = exception.driverError;
+      if (driverError && driverError.code === '23505') {
+        status = HttpStatus.CONFLICT;
+        message = 'Conflicto de duplicidad en la base de datos';
+        code = 'DB_UNIQUE_CONSTRAINT';
+      } else if (driverError && driverError.code === '23503') {
+        status = HttpStatus.BAD_REQUEST;
+        message = 'Error de relación: Referencia no encontrada';
+        code = 'DB_FOREIGN_KEY_ERROR';
+      }
     } else if (
       exception.getStatus &&
       typeof exception.getStatus === 'function'
