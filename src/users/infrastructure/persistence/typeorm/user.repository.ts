@@ -12,8 +12,7 @@ import { TypeormRoleModel } from '../../../../roles/infrastructure/persistence/t
 @Injectable()
 export class TypeOrmUserRepository
   extends BaseTypeOrmRepository<User, UserOrmEntity, string>
-  implements UserRepository
-{
+  implements UserRepository {
   constructor(
     @InjectRepository(UserOrmEntity)
     private readonly userRepository: Repository<UserOrmEntity>,
@@ -26,7 +25,7 @@ export class TypeOrmUserRepository
   async create(user: User): Promise<boolean> {
     try {
       const userPersistence = this.mapper.toPersistence(user);
-      
+
       // Manejar roles si existen
       const roleNames = user.getRoles();
       if (roleNames.length > 0) {
@@ -88,6 +87,37 @@ export class TypeOrmUserRepository
           originalError: error,
           class: this.constructor.name,
           method: 'usernameExists',
+        },
+      );
+    }
+  }
+
+  async assingRoles(userId: string, roleIds: string[]): Promise<void> {
+    try {
+      // 1. Buscamos al usuario incluyendo su relación de roles actual
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+        relations: ['roles'] // Asegúrate de que el nombre coincida con el definido en tu Entity
+      });
+
+      if (!user) throw new Error("No existe el usuario");
+
+      // 2. Mapeamos los IDs a objetos de tipo Role (TypeORM necesita las entidades o al menos sus IDs)
+      // Nota: Se asume que tienes acceso a RoleRepository o puedes pasar objetos con el ID
+      user.roles = roleIds.map(id => ({ id } as any));
+
+      // 3. Guardamos los cambios. TypeORM gestionará automáticamente la tabla intermedia
+      await this.userRepository.save(user);
+
+    } catch (error) {
+      // Es buena práctica relanzar el error o manejarlo según tu política de logs
+      throw new ErrorRepositoryService(
+        'Error al intentar asignar el rol al usuario',
+        'ASSING_ROLES_FAILED',
+        {
+          originalError: error,
+          class: this.constructor.name,
+          method: 'assingRoles',
         },
       );
     }

@@ -32,19 +32,22 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = 'Error de relación: Referencia no encontrada';
         code = 'DB_FOREIGN_KEY_ERROR';
       }
-    } else if (
-      exception.getStatus &&
-      typeof exception.getStatus === 'function'
-    ) {
+    } else if (typeof exception.getStatus === 'function') {
       status = exception.getStatus();
-      message = exception.message;
+      const res = exception.getResponse() as any;
+
+      // Si res.message existe (que vendrá del ValidationPipe), lo usamos.
+      // De lo contrario, usamos el mensaje por defecto.
+      message = res.message || res;
+      code = res.error || 'VALIDATION_ERROR';
     }
 
+    // Respuesta final
     response.status(status).json({
       success: false,
       error: {
         code,
-        message,
+        message, // <--- Ahora sí será el array de validaciones
         timestamp: new Date().toISOString(),
       },
     });

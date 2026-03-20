@@ -7,7 +7,7 @@ export async function BootNestJs() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
+
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -20,6 +20,8 @@ export async function BootNestJs() {
       errorHttpStatusCode: 422,
     }),
   );
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   // 3. Configuración de Red
   app.enableCors();

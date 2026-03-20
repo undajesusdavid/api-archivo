@@ -1,21 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/shared/core/interfaces/use-case.interface';
 import { RequestLoanCommand } from './request-loan.command';
-import { LOAN_REPOSITORY, type LoanRepository } from '../../core/contracts/LoanRepository';
-import { HISTORY_REPOSITORY, type HistoryRepository } from '../../core/contracts/HistoryRepository';
+import { type LoanRepository } from '../../core/contracts/LoanRepository';
+import { type HistoryRepository } from '../../core/contracts/HistoryRepository';
 import { Loan, LoanStatus } from '../../core/entities/Loan';
 import { HistoryEntry, HistoryAction, HistoryTargetType } from '../../core/entities/HistoryEntry';
 import { LoanableType } from '../../core/entities/LoanableType';
-import { type IUuidService, UUID_SERVICE } from 'src/shared/core/interfaces/uuid-service.interface';
+import { type IUuidService } from 'src/shared/core/interfaces/uuid-service.interface';
 
-@Injectable()
 export class RequestLoanUseCase implements IUseCase<RequestLoanCommand, void> {
   constructor(
-    @Inject(LOAN_REPOSITORY)
     private readonly loanRepository: LoanRepository,
-    @Inject(HISTORY_REPOSITORY)
     private readonly historyRepository: HistoryRepository,
-    @Inject(UUID_SERVICE)
     private readonly uuidService: IUuidService,
   ) {}
 

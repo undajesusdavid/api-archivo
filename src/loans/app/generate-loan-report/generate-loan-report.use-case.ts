@@ -1,28 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/shared/core/interfaces/use-case.interface';
-import { DOCUMENT_REPOSITORY, type DocumentRepository } from '../../../inventory/core/contracts/DocumentRepository';
-import { LOAN_REPOSITORY, type LoanRepository } from '../../core/contracts/LoanRepository';
-import { PDF_SERVICE, type PdfService } from '../../core/contracts/PdfService';
-import { RECORD_REPOSITORY, type RecordRepository } from '../../../inventory/core/contracts/RecordRepository';
-import { USER_REPOSITORY, type UserRepository } from '../../../users/core/contracts/UserRepository';
+import { type DocumentRepository } from '../../../inventory/core/contracts/DocumentRepository';
+import { type LoanRepository } from '../../core/contracts/LoanRepository';
+import { type PdfService } from '../../core/contracts/PdfService';
+import { type RecordRepository } from '../../../inventory/core/contracts/RecordRepository';
+import { type UserRepository } from '../../../users/core/contracts/UserRepository';
 import { LoanableType } from '../../core/entities/LoanableType';
 
 export class GenerateLoanReportCommand {
   constructor(public readonly loanId: string) {}
 }
 
-@Injectable()
 export class GenerateLoanReportUseCase implements IUseCase<GenerateLoanReportCommand, Buffer> {
   constructor(
-    @Inject(LOAN_REPOSITORY)
     private readonly loanRepository: LoanRepository,
-    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
-    @Inject(PDF_SERVICE)
     private readonly pdfService: PdfService,
-    @Inject(RECORD_REPOSITORY)
     private readonly recordRepository: RecordRepository,
-    @Inject(DOCUMENT_REPOSITORY)
     private readonly documentRepository: DocumentRepository,
   ) {}
 

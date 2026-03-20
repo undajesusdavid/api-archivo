@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column, CreateDateColumn, ManyToOne, JoinColumn 
 import { HistoryAction, HistoryTargetType } from '../../../core/entities/HistoryEntry';
 import { UserOrmEntity } from '../../../../users/infrastructure/persistence/typeorm/user.model';
 
-@Entity('history_logs')
+@Entity('ln_history_logs')
 export class TypeOrmHistoryModel {
   @PrimaryColumn('uuid')
   id: string;

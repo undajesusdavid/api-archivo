@@ -1,27 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/shared/core/interfaces/use-case.interface';
 import { ApproveLoanCommand } from './approve-loan.command';
-import { LOAN_REPOSITORY, type LoanRepository } from '../../core/contracts/LoanRepository';
-import { HISTORY_REPOSITORY, type HistoryRepository } from '../../core/contracts/HistoryRepository';
+import { type LoanRepository } from '../../core/contracts/LoanRepository';
+import { type HistoryRepository } from '../../core/contracts/HistoryRepository';
 import { HistoryEntry, HistoryAction, HistoryTargetType } from '../../core/entities/HistoryEntry';
 import { LoanableType } from '../../core/entities/LoanableType';
-import { type IUuidService, UUID_SERVICE } from 'src/shared/core/interfaces/uuid-service.interface';
-import { RECORD_REPOSITORY, type RecordRepository } from '../../../inventory/core/contracts/RecordRepository';
-import { DOCUMENT_REPOSITORY, type DocumentRepository } from '../../../inventory/core/contracts/DocumentRepository';
+import { type IUuidService } from 'src/shared/core/interfaces/uuid-service.interface';
+import { type RecordRepository } from '../../../inventory/core/contracts/RecordRepository';
+import { type DocumentRepository } from '../../../inventory/core/contracts/DocumentRepository';
 import { InventoryStatus } from '../../../inventory/core/value-objects/InventoryStatus';
 
-@Injectable()
 export class ApproveLoanUseCase implements IUseCase<ApproveLoanCommand, void> {
   constructor(
-    @Inject(LOAN_REPOSITORY)
     private readonly loanRepository: LoanRepository,
-    @Inject(HISTORY_REPOSITORY)
     private readonly historyRepository: HistoryRepository,
-    @Inject(UUID_SERVICE)
     private readonly uuidService: IUuidService,
-    @Inject(RECORD_REPOSITORY)
     private readonly recordRepository: RecordRepository,
-    @Inject(DOCUMENT_REPOSITORY)
     private readonly documentRepository: DocumentRepository,
   ) {}
 

@@ -15,14 +15,19 @@ import { TypeOrmLoanRepository } from '../../persistence/typeorm/loan.repository
 import { LOAN_REPOSITORY } from '../../../core/contracts/LoanRepository';
 import { TypeOrmLoanMapper } from '../../persistence/typeorm/loan.mapper';
 import { TypeOrmHistoryRepository } from '../../persistence/typeorm/history.repository';
-import { HISTORY_REPOSITORY } from '../../../core/contracts/HistoryRepository';
+import { HISTORY_REPOSITORY, type HistoryRepository } from '../../../core/contracts/HistoryRepository';
 import { TypeOrmHistoryMapper } from '../../persistence/typeorm/history.mapper';
 import { RequestLoanUseCase } from '../../../app/request-loan/request-loan.use-case';
 import { RequestLoanCommand } from '../../../app/request-loan/request-loan.command';
 import { ApproveLoanUseCase } from '../../../app/approve-loan/approve-loan.use-case';
 import { ApproveLoanCommand } from '../../../app/approve-loan/approve-loan.command';
 import { GenerateLoanReportUseCase } from '../../../app/generate-loan-report/generate-loan-report.use-case';
-import { PDF_SERVICE } from '../../../core/contracts/PdfService';
+import { type LoanRepository } from '../../../core/contracts/LoanRepository';
+import { type IUuidService, UUID_SERVICE } from 'src/shared/core/interfaces/uuid-service.interface';
+import { type RecordRepository, RECORD_REPOSITORY } from '../../../../inventory/core/contracts/RecordRepository';
+import { type DocumentRepository, DOCUMENT_REPOSITORY } from '../../../../inventory/core/contracts/DocumentRepository';
+import { type UserRepository, USER_REPOSITORY } from '../../../../users/core/contracts/UserRepository';
+import { type PdfService, PDF_SERVICE } from '../../../core/contracts/PdfService';
 import { PdfServiceImp } from '../../services/PdfServiceImp';
 
 @Module({
@@ -48,9 +53,34 @@ import { PdfServiceImp } from '../../services/PdfServiceImp';
     },
     TypeOrmLoanMapper,
     TypeOrmHistoryMapper,
-    RequestLoanUseCase,
-    ApproveLoanUseCase,
-    GenerateLoanReportUseCase,
+    {
+      provide: RequestLoanUseCase,
+      useFactory: (loanRepo: LoanRepository, historyRepo: HistoryRepository, uuidService: IUuidService) =>
+        new RequestLoanUseCase(loanRepo, historyRepo, uuidService),
+      inject: [LOAN_REPOSITORY, HISTORY_REPOSITORY, UUID_SERVICE],
+    },
+    {
+      provide: ApproveLoanUseCase,
+      useFactory: (
+        loanRepo: LoanRepository,
+        historyRepo: HistoryRepository,
+        uuidService: IUuidService,
+        recordRepo: RecordRepository,
+        docRepo: DocumentRepository,
+      ) => new ApproveLoanUseCase(loanRepo, historyRepo, uuidService, recordRepo, docRepo),
+      inject: [LOAN_REPOSITORY, HISTORY_REPOSITORY, UUID_SERVICE, RECORD_REPOSITORY, DOCUMENT_REPOSITORY],
+    },
+    {
+      provide: GenerateLoanReportUseCase,
+      useFactory: (
+        loanRepo: LoanRepository,
+        userRepo: UserRepository,
+        pdfService: PdfService,
+        recordRepo: RecordRepository,
+        docRepo: DocumentRepository,
+      ) => new GenerateLoanReportUseCase(loanRepo, userRepo, pdfService, recordRepo, docRepo),
+      inject: [LOAN_REPOSITORY, USER_REPOSITORY, PDF_SERVICE, RECORD_REPOSITORY, DOCUMENT_REPOSITORY],
+    },
   ],
   exports: [LOAN_REPOSITORY, HISTORY_REPOSITORY],
 })

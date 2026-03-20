@@ -4,7 +4,7 @@ import { ConservationStatus } from '../../../core/value-objects/ConservationStat
 import { TypeOrmFolderModel } from './folder.model';
 import { TypeOrmDocumentModel } from './document.model';
 
-@Entity('records')
+@Entity('inv_records')
 export class TypeOrmRecordModel {
   @PrimaryColumn('uuid')
   id: string;

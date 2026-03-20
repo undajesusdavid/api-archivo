@@ -2,7 +2,7 @@
 import { Entity, PrimaryColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import { TypeormRoleModel } from '../../../../roles/infrastructure/persistence/typeorm/role.model';
 
-@Entity('usuarios')
+@Entity('usr_users')
 export class UserOrmEntity {
   @PrimaryColumn('uuid')
   id: string;
@@ -13,7 +13,7 @@ export class UserOrmEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false }) // Seguridad: No devuelve el password por defecto en las consultas
+  @Column({ select: true }) // Seguridad: No devuelve el password por defecto en las consultas
   password: string;
 
   @Column({ default: true })
@@ -26,7 +26,7 @@ export class UserOrmEntity {
    */
   @ManyToMany(() => TypeormRoleModel, (role) => role.users)
   @JoinTable({
-    name: 'user_roles', // Nombre de la tabla intermedia
+    name: 'usr_user_roles', // Nombre de la tabla intermedia
     joinColumn: { name: 'userId', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'roleId', referencedColumnName: 'id' },
   })

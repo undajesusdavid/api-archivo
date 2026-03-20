@@ -4,6 +4,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AppError } from 'src/shared/core/errors/app-error';
@@ -14,37 +15,39 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    // --- LOG PARA DEBUG (Míralo en tu terminal de VS Code/Terminal) ---
+    console.log('TIPO DE EXCEPCION:', exception.constructor.name);
+    console.log('RESPUESTA INTERNA:', exception.getResponse ? exception.getResponse() : 'No tiene getResponse');
+
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Internal Server Error';
+    let message: any = 'Internal Server Error';
     let code = 'INTERNAL_SERVER_ERROR';
 
-    console.log(exception.TypeError);
+    // PRIORIDAD 1: EXCEPCIONES DE NESTJS (Aquí caen las validaciones 422)
+    if (exception.getStatus && typeof exception.getStatus === 'function') {
+      status = exception.getStatus();
+      const res = exception.getResponse() as any;
 
-    // A. Capturar errores de dominio (AppError)
-    if (exception instanceof AppError) {
-      status = HttpStatus.BAD_REQUEST; // Puedes hacer un mapa de Error -> Status
+      if (typeof res === 'object' && res !== null) {
+        // ValidationPipe guarda los strings en .message
+        message = res.message || exception.message;
+        code = res.error || 'HTTP_ERROR';
+      } else {
+        message = res || exception.message;
+        code = 'HTTP_ERROR';
+      }
+    }
+    // PRIORIDAD 2: TUS ERRORES DE DOMINIO
+    else if (exception instanceof AppError) {
+      status = HttpStatus.BAD_REQUEST;
       message = exception.message;
       code = exception.code;
     }
-
-    // B. Capturar errores de TypeORM
+    // PRIORIDAD 3: ERRORES DE BASE DE DATOS
     else if (exception.name === 'QueryFailedError') {
-      const driverError = exception.driverError;
-      if (driverError && driverError.code === '23505') {
-        status = HttpStatus.CONFLICT;
-        message = 'Conflicto de duplicidad en la base de datos';
-        code = 'DB_UNIQUE_CONSTRAINT';
-      } else if (driverError && driverError.code === '23503') {
-        status = HttpStatus.BAD_REQUEST;
-        message = 'Error de relación: Referencia no encontrada';
-        code = 'DB_FOREIGN_KEY_ERROR';
-      }
-    }
-
-    // C. Errores de NestJS (HttpException)
-    else if (exception.getStatus && typeof exception.getStatus === 'function') {
-      status = exception.getStatus();
-      message = exception.message;
+      status = HttpStatus.CONFLICT;
+      message = 'Error de base de datos';
+      code = 'DB_ERROR';
     }
 
     response.status(status).json({

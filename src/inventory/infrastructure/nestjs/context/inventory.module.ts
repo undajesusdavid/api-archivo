@@ -26,8 +26,11 @@ import { TypeOrmRecordRepository } from '../../persistence/typeorm/record.reposi
 import { RECORD_REPOSITORY } from '../../../core/contracts/RecordRepository';
 import { TypeOrmRecordMapper } from '../../persistence/typeorm/record.mapper';
 import { TypeOrmDocumentRepository } from '../../persistence/typeorm/document.repository';
-import { DOCUMENT_REPOSITORY } from '../../../core/contracts/DocumentRepository';
+import { DOCUMENT_REPOSITORY, type DocumentRepository } from '../../../core/contracts/DocumentRepository';
 import { TypeOrmDocumentMapper } from '../../persistence/typeorm/document.mapper';
+import { type BoxRepository } from '../../../core/contracts/BoxRepository';
+import { type FolderRepository } from '../../../core/contracts/FolderRepository';
+import { type RecordRepository } from '../../../core/contracts/RecordRepository';
 
 @Module({
   imports: [
@@ -61,8 +64,21 @@ import { TypeOrmDocumentMapper } from '../../persistence/typeorm/document.mapper
     TypeOrmFolderMapper,
     TypeOrmRecordMapper,
     TypeOrmDocumentMapper,
-    CreateBoxUseCase,
-    GetInventoryUseCase,
+    {
+      provide: CreateBoxUseCase,
+      useFactory: (boxRepo: BoxRepository) => new CreateBoxUseCase(boxRepo),
+      inject: [BOX_REPOSITORY],
+    },
+    {
+      provide: GetInventoryUseCase,
+      useFactory: (
+        boxRepo: BoxRepository,
+        folderRepo: FolderRepository,
+        recordRepo: RecordRepository,
+        docRepo: DocumentRepository,
+      ) => new GetInventoryUseCase(boxRepo, folderRepo, recordRepo, docRepo),
+      inject: [BOX_REPOSITORY, FOLDER_REPOSITORY, RECORD_REPOSITORY, DOCUMENT_REPOSITORY],
+    },
   ],
   exports: [BOX_REPOSITORY, FOLDER_REPOSITORY, RECORD_REPOSITORY, DOCUMENT_REPOSITORY],
 })

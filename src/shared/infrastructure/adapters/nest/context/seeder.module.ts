@@ -9,6 +9,7 @@ import { RoleSeeder } from 'src/roles/infrastructure/persistence/seeding/role.se
 import { UserSeeder } from 'src/users/infrastructure/persistence/seeding/user.seeder';
 import { InventoryModule } from 'src/inventory/infrastructure/nestjs/context/inventory.module';
 import { InventorySeeder } from 'src/inventory/infrastructure/persistence/seeding/inventory.seeder';
+import { LoansModule } from 'src/loans/infrastructure/nestjs/context/loans.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { InventorySeeder } from 'src/inventory/infrastructure/persistence/seedin
     RolesModule,
     PermissionModule,
     InventoryModule,
+    LoansModule,
   ],
   providers: [PermissionSeeder, RoleSeeder, UserSeeder, InventorySeeder],
   exports: [PermissionSeeder, RoleSeeder, UserSeeder, InventorySeeder],

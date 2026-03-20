@@ -3,7 +3,7 @@ import { LoanStatus } from '../../../core/entities/Loan';
 import { LoanableType } from '../../../core/entities/LoanableType';
 import { UserOrmEntity } from '../../../../users/infrastructure/persistence/typeorm/user.model';
 
-@Entity('loans')
+@Entity('ln_loans')
 export class TypeOrmLoanModel {
   @PrimaryColumn('uuid')
   id: string;

@@ -3,7 +3,7 @@ import { InventoryStatus } from '../../../core/value-objects/InventoryStatus';
 import { ConservationStatus } from '../../../core/value-objects/ConservationStatus';
 import { TypeOrmRecordModel } from './record.model';
 
-@Entity('documents')
+@Entity('inv_documents')
 export class TypeOrmDocumentModel {
   @PrimaryColumn('uuid')
   id: string;

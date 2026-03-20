@@ -1,15 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/shared/core/interfaces/use-case.interface';
 import { CreateBoxCommand } from './create-box.command';
-import { BOX_REPOSITORY, type BoxRepository } from '../../core/contracts/BoxRepository';
+import { type BoxRepository } from '../../core/contracts/BoxRepository';
 import { Box } from '../../core/entities/Box';
 import { InventoryStatus } from '../../core/value-objects/InventoryStatus';
 import { ConservationStatus } from '../../core/value-objects/ConservationStatus';
 
-@Injectable()
 export class CreateBoxUseCase implements IUseCase<CreateBoxCommand, void> {
   constructor(
-    @Inject(BOX_REPOSITORY)
     private readonly boxRepository: BoxRepository,
   ) {}
 

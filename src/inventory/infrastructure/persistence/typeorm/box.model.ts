@@ -3,7 +3,7 @@ import { InventoryStatus } from '../../../core/value-objects/InventoryStatus';
 import { ConservationStatus } from '../../../core/value-objects/ConservationStatus';
 import { TypeOrmFolderModel } from './folder.model';
 
-@Entity('boxes')
+@Entity('inv_boxes')
 export class TypeOrmBoxModel {
   @PrimaryColumn('uuid')
   id: string;

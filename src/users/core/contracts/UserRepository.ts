@@ -8,4 +8,5 @@ export interface UserRepository extends IBaseRepository<User, string> {
   findByUsername(username: string): Promise<User | null>;
   usernameExists(username: string): Promise<boolean>;
   emailExists(email: string): Promise<boolean>;
+  assingRoles(userId: string, roleIds: string[]) : Promise<void>; 
 }

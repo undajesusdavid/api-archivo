@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { TypeormRoleModel } from '../../../../roles/infrastructure/persistence/typeorm/role.model';
 
-@Entity('ac_permisos')
+@Entity('prm_permissions')
 export class TypeormPermissionModel {
   @PrimaryGeneratedColumn()
   id: number;

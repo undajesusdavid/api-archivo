@@ -1,4 +1,4 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './context/app.module';
 import { GlobalExceptionFilter } from 'src/shared/infrastructure/adapters/nest/filters/global-exception.filter';
@@ -15,6 +15,18 @@ export async function BootNest() {
       transform: true,
       transformOptions: { enableImplicitConversion: false },
       errorHttpStatusCode: 422,
+      exceptionFactory: (validationErrors) => {
+        // Reducimos el array de errores a un solo objeto de mapeo
+        const errorsObject = validationErrors.reduce((acc, error) => {
+          const constraints = Object.values(error.constraints || {});
+          // Tomamos el primer mensaje de error para ese campo
+          acc[error.property] = constraints.length > 0 ? constraints[0] : 'Dato inválido';
+          return acc;
+        }, {});
+
+        // Retornamos el formato solicitado: un array con el objeto de errores
+        return new UnprocessableEntityException([errorsObject]);
+      },
     }),
   );
   app.enableCors();

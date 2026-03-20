@@ -31,22 +31,23 @@ export class UserSeeder implements Seeder {
       const existing = await this.userRepository.findByUsername(u.username);
       if (!existing) {
         // Buscamos el ID del rol por su nombre
-        const role = await this.roleRepository.findByName(u.role);
-        if (!role) {
-          throw new Error(
-            `Rol ${u.role} no encontrado para el usuario ${u.username}`,
-          );
-        }
 
         const user = new User({
           id: this.uuidService.generateUUID(),
           username: u.username,
           email: u.email,
           password: this.hashedService.hashed(u.password),
-          active: u.active,
-          roles: [role.getId()],
+          active: u.active
         });
         await this.userRepository.save(user);
+
+        const role = await this.roleRepository.findByName(u.role);
+        if (!role) {
+          throw new Error(
+            `Rol ${u.role} no encontrado para el usuario ${u.username}`,
+          );
+        }
+        await this.userRepository.assingRoles(user.getId(), [role.getId()])
       }
     }
   }

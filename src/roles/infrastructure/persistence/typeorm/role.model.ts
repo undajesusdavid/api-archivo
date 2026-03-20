@@ -11,7 +11,7 @@ import {
 import { TypeormPermissionModel } from '../../../../permissions/infrastructure/persistence/typeorm/permission.model';
 import { UserOrmEntity } from '../../../../users/infrastructure/persistence/typeorm/user.model';
 
-@Entity('ac_roles')
+@Entity('rol_roles')
 export class TypeormRoleModel {
   @PrimaryColumn('uuid')
   id: string;
@@ -27,11 +27,11 @@ export class TypeormRoleModel {
 
   /**
    * Relación Muchos a Muchos con Permisos
-   * @JoinTable define la tabla pivote 'ac_role_permissions'
+   * @JoinTable define la tabla pivote 'rol_role_permissions'
    */
   @ManyToMany(() => TypeormPermissionModel, (permission) => permission.roles)
   @JoinTable({
-    name: 'ac_role_permissions',
+    name: 'rol_role_permissions',
     joinColumn: { name: 'roleId', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'permissionId', referencedColumnName: 'id' },
   })

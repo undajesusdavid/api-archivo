@@ -18,6 +18,8 @@
 
 # Reglas para la creacion de nuevos modulos
 - Cada nuevo módulo debe tener las carpetas: /core, /app, /infrastructure.
+- No importes o uses decoradores y librerias externas en la capa core y app, solo en la capa infrastructure.
+- Manten la capa core y  app agnostica a librerias externas como nestjs o cualquier funcionalidad importada directamente.
 - Guiate de la estructura de los modulos existentes.
 - Garantiza la consistencia estandar del proyecto en todos los modulos.
 - Usa el sistema de Roles y Permisos actual.
@@ -25,8 +27,11 @@
 - Genera las migraciones necesarias respetando las llaves foráneas.
 - Garantiza que todo el ciclo de vida de las peticiones a la api funcionen.
 - cuando termines de crear los modulos exporta explicacion detallada de las reglas de negocio que creaste.
+
+# Reglas de base de datos
 - los nombres de las  tablas deben estar en español.
 - los nombres de las columnas deben estar en ingles.
+- todas las tablas que pertenescan a un modulo deben tener el prefijo del modulo en ingles y abreviado usando minusculas y como separador un guion bajo.
 
 
 
