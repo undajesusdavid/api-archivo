@@ -1,6 +1,7 @@
 import { IsString, IsEmail, MinLength, IsDefined } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { User } from 'src/users/core/entities/User';
+import { Match } from 'src/shared/infrastructure/base/decorators/validation/match-constraint';
 
 export class CreateUserRequestDto {
   //--------------------------------------------------------------------------------
@@ -17,6 +18,11 @@ export class CreateUserRequestDto {
   @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   password: string;
+
+  //----------------------------------------------------------------------- 
+  @IsDefined({ message: 'Debes confirmar la contraseña' })
+  @Match('password', { message: 'Las contraseñas no coinciden' })
+  passwordConfirm: string;
   //--------------------------------------------------------------------------------
   @IsDefined({ message: 'El email es obligatorio' })
   @IsEmail({}, { message: 'El email no tiene un formato válido' })
